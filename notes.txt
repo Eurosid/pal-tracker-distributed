@@ -1,3 +1,28 @@
+https://spring-cloud-broker.apps.evans.pal.pivotal.io/actuator/info
+{
+    "git":
+    {
+        "commit":
+        {
+            "time":"2021-02-10T20:37:54Z",
+            "id":"dc47634"
+        },
+        "branch":"HEAD"
+    },
+    "build":
+     {
+        "version":"2.1.8-build.5",
+        "artifact":"spring-cloud-service-broker",
+        "name":"service-broker",
+        "group":"io.pivotal.spring.cloud",
+        "time":"2021-02-10T20:40:14.379Z"
+     }
+}
+
+https://spring-cloud-broker./actuator/info
+
+###################################################################################################################################################
+
 USER_ID='1'
 ACCOUNT_ID='1'
 PROJECT_ID='1'
