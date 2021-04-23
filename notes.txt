@@ -23,3 +23,43 @@ curl -v localhost:8082/stories?projectId=${PROJECT_ID}
 
 curl -v -XPOST -H"Content-Type: application/json" localhost:8084/time-entries/ -d"{\"projectId\": ${PROJECT_ID}, \"userId\": ${USER_ID}, \"date\": \"2015-05-17\", \"hours\": 6}"
 curl -v localhost:8084/time-entries?userId=${USER_ID}
+
+###################################################################################################################################################
+
+gradle bootRun
+
+git status
+git add {filespec}
+git commit -m "Comment"
+git push
+
+cf target
+cf check-route pal-tracker-jbrandim apps.evans.pal.pivotal.io
+cf map-route apps.evans.pal.pivotal.io --hostname pal-tracker-jbrandim
+cf unmap-route apps.evans.pal.pivotal.io --hostname pal-tracker-jbrandim
+
+http://pal-tracker-chatty-gecko-gy.apps.evans.pal.pivotal.io/
+http://pal-tracker-jbrandim.apps.evans.pal.pivotal.io/
+http://localhost:8080/
+
+
+curl -v localhost:8080/time-entries
+curl -v localhost:8080/time-entries/${TIME_ENTRY_ID}
+curl -v -XPUT -H"Content-Type: application/json" localhost:8080/time-entries/${TIME_ENTRY_ID} -d"{\"projectId\": 88, \"userId\": 99, \"date\": \"2019-01-01\", \"hours\": 8}"
+curl -v -XDELETE -H"Content-Type: application/json" localhost:8080/time-entries/${TIME_ENTRY_ID}
+
+curl -v pal-tracker-jbrandim.apps.evans.pal.pivotal.io/time-entries
+curl -v pal-tracker-jbrandim.apps.evans.pal.pivotal.io/time-entries/${TIME_ENTRY_ID}
+curl -v -XPUT -H"Content-Type: application/json" pal-tracker-jbrandim.apps.evans.pal.pivotal.io/time-entries/${TIME_ENTRY_ID} -d"{\"projectId\": 88, \"userId\": 99, \"date\": \"2019-01-01\", \"hours\": 8}"
+curl -v -XDELETE -H"Content-Type: application/json" pal-tracker-jbrandim.apps.evans.pal.pivotal.io/time-entries/${TIME_ENTRY_ID}
+
+cf marketplace
+cf services
+cf create-service p.mysql db-small tracker-database
+./gradlew cloudNativeDeveloperDatabaseAccess -PserverUrl=http://pal-tracker-jbrandim.apps.evans.pal.pivotal.io
+./gradlew cloudNativeDeveloperHealthMonitoring -PserverUrl=http://pal-tracker-jbrandim.apps.evans.pal.pivotal.io/actuator
+
+
+docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -e URL=http://pal-tracker-jbrandim.apps.evans.pal.pivotal.io pivotaleducation/loadtest
+docker run -i -t --rm -e DURATION=300 -e NUM_USERS=100 -e REQUESTS_PER_SECOND=50 -e URL=http://pal-tracker-jbrandim.apps.evans.pal.pivotal.io pivotaleducation/loadtest
+curl -v -XPOST -H "Content-Length:0"  http://pal-tracker-jbrandim.apps.evans.pal.pivotal.io/actuator/palTrackerFailure
