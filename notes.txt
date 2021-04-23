@@ -1,0 +1,25 @@
+USER_ID='1'
+ACCOUNT_ID='1'
+PROJECT_ID='1'
+
+REGISTRATION_APP_URL='registration-pal-jbrandim.apps.evans.pal.pivotal.io'
+BACKLOG_APP_URL='backlog-pal-jbrandim.apps.evans.pal.pivotal.io'
+ALLOCATIONS_APP_URL='allocations-pal-jbrandim.apps.evans.pal.pivotal.io'
+TIMESHEETS_APP_URL='timesheets-pal-jbrandim.apps.evans.pal.pivotal.io'
+
+curl -v -XPOST -H"Content-Type: application/json" localhost:8083/registration -d'{"name": "Pete"}'
+curl -v localhost:8083/users/${USER_ID}
+
+curl -v localhost:8083/accounts?ownerId=${USER_ID}
+
+curl -v -XPOST -H"Content-Type: application/json" localhost:8083/projects -d"{\"name\": \"Basket Weaving\", \"accountId\": ${ACCOUNT_ID}}"
+curl -v localhost:8083/projects?accountId=${ACCOUNT_ID}
+
+curl -v -XPOST -H"Content-Type: application/json" localhost:8081/allocations -d"{\"projectId\": ${PROJECT_ID}, \"userId\": ${USER_ID}, \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+curl -v localhost:8081/allocations?projectId=${PROJECT_ID}
+
+curl -v -XPOST -H"Content-Type: application/json" localhost:8082/stories -d"{\"projectId\": ${PROJECT_ID}, \"name\": \"Find some reeds\"}"
+curl -v localhost:8082/stories?projectId=${PROJECT_ID}
+
+curl -v -XPOST -H"Content-Type: application/json" localhost:8084/time-entries/ -d"{\"projectId\": ${PROJECT_ID}, \"userId\": ${USER_ID}, \"date\": \"2015-05-17\", \"hours\": 6}"
+curl -v localhost:8084/time-entries?userId=${USER_ID}
